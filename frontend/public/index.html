@@ -1,0 +1,3261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One Health Card System</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary-color: #1a73e8;
+        --primary-dark: #0d47a1;
+        --secondary-color: #34a853;
+        --accent-color: #ea4335;
+        --light-color: #f8f9fa;
+        --dark-color: #202124;
+        --gray-color: #5f6368;
+        --border-color: #dadce0;
+        --card-background: #ffffff;
+        --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        color: var(--dark-color);
+        background-color: #f5f7fa;
+        line-height: 1.6;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header & Navbar */
+      header {
+        background-color: var(--card-background);
+        box-shadow: var(--shadow);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo-icon {
+        color: var(--primary-color);
+        font-size: 28px;
+      }
+
+      .logo-text {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+
+      .logo-text span {
+        color: var(--secondary-color);
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 25px;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--gray-color);
+        font-weight: 500;
+        transition: var(--transition);
+        padding: 5px 0;
+        position: relative;
+      }
+
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: var(--primary-color);
+      }
+
+      .nav-links a.active::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--primary-color);
+      }
+
+      .nav-buttons {
+        display: flex;
+        gap: 15px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: var(--transition);
+        font-size: 16px;
+      }
+
+      .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background-color: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+      }
+
+      .btn-secondary:hover {
+        background-color: rgba(26, 115, 232, 0.1);
+      }
+
+      .btn-small {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+
+      .hamburger {
+        display: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--gray-color);
+      }
+
+      /* Hero Section */
+      .hero {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+        border-radius: 0 0 30px 30px;
+        margin-bottom: 60px;
+      }
+
+      .hero-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+      }
+
+      .hero-text {
+        flex: 1;
+      }
+
+      .hero-text h1 {
+        font-size: 42px;
+        margin-bottom: 20px;
+        line-height: 1.2;
+        color: var(--dark-color);
+      }
+
+      .hero-text h1 span {
+        color: var(--primary-color);
+      }
+
+      .hero-text p {
+        font-size: 18px;
+        color: var(--gray-color);
+        margin-bottom: 30px;
+        max-width: 600px;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .hero-image {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+      }
+
+      .card-preview {
+        width: 320px;
+        height: 200px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card-preview::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        top: -100px;
+        right: -100px;
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+      }
+
+      .card-logo {
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .card-chip {
+        width: 40px;
+        height: 30px;
+        background: #ffcc00;
+        border-radius: 5px;
+        position: relative;
+      }
+
+      .card-details {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .card-number {
+        font-size: 18px;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+      }
+
+      .card-holder {
+        font-size: 14px;
+      }
+
+      /* Sections */
+      .section {
+        padding: 60px 0;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 32px;
+        margin-bottom: 50px;
+        color: var(--dark-color);
+      }
+
+      .section-title span {
+        color: var(--primary-color);
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+      }
+
+      .feature-card {
+        background-color: var(--card-background);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .feature-icon {
+        font-size: 40px;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+      }
+
+      .feature-card h3 {
+        font-size: 22px;
+        margin-bottom: 15px;
+      }
+
+      .faq-container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .faq-item {
+        margin-bottom: 15px;
+        background-color: var(--card-background);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+
+      .faq-question {
+        padding: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 500;
+        background-color: var(--card-background);
+      }
+
+      .faq-answer {
+        padding: 0 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .faq-answer.open {
+        padding: 0 20px 20px;
+        max-height: 300px;
+      }
+
+      .faq-toggle {
+        transition: var(--transition);
+      }
+
+      .faq-item.active .faq-toggle {
+        transform: rotate(45deg);
+      }
+
+      /* Footer */
+      footer {
+        background-color: var(--dark-color);
+        color: white;
+        padding: 60px 0 30px;
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+
+      .footer-section h3 {
+        font-size: 20px;
+        margin-bottom: 20px;
+        color: white;
+      }
+
+      .footer-section p,
+      .footer-section a {
+        color: #b0b0b0;
+        margin-bottom: 10px;
+        display: block;
+        text-decoration: none;
+        transition: var(--transition);
+      }
+
+      .footer-section a:hover {
+        color: white;
+        padding-left: 5px;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .social-icons a {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 18px;
+      }
+
+      .copyright {
+        text-align: center;
+        padding-top: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: #b0b0b0;
+        font-size: 14px;
+      }
+
+      /* Page-specific styles */
+      .page {
+        display: none;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .page.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Registration Page */
+      .registration-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: var(--card-background);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 40px;
+        margin-bottom: 60px;
+      }
+
+      .form-title {
+        font-size: 28px;
+        margin-bottom: 30px;
+        color: var(--dark-color);
+        text-align: center;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 20px;
+      }
+
+      .form-col {
+        flex: 1;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--dark-color);
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        font-size: 16px;
+        font-family: "Roboto", sans-serif;
+        transition: var(--transition);
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+      }
+
+      .form-section {
+        margin-bottom: 40px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .form-section h3 {
+        font-size: 20px;
+        margin-bottom: 20px;
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .form-section h3 i {
+        font-size: 22px;
+      }
+
+      /* Card Preview Page */
+      .card-preview-page {
+        padding: 60px 0;
+      }
+
+      /* UPDATED FRONT SIDE CARD STYLES */
+      .body-front {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 20px 0;
+      }
+
+      /* CARD - Fixed positioning */
+      .card {
+        width: 350px;
+        height: 220px;
+        border-radius: 12px;
+        background: linear-gradient(to bottom, #e6f2ff 0%, #ffffff 15px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        position: relative;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid #cccccc;
+      }
+
+      /* CURVED CORNERS - Adjusted positioning */
+      .corner {
+        position: absolute;
+        width: 75px;
+        height: 60px;
+        background: #e0f7fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #b2ebf2;
+      }
+
+      .corner.left {
+        top: 0;
+        left: 0;
+        border-bottom-right-radius: 60px;
+      }
+
+      .corner.right {
+        top: 0;
+        right: 0;
+        border-bottom-left-radius: 60px;
+      }
+
+      .corner img {
+        width: 35px;
+        height: 35px;
+        object-fit: contain;
+      }
+
+      /* TITLE - Adjusted position */
+      .title {
+        text-align: center;
+        margin-top: 10px;
+        padding-top: 5px;
+      }
+
+      .title .gov {
+        font-size: 13px;
+        font-weight: bold;
+        color: #0d47a1;
+        letter-spacing: 0.5px;
+      }
+
+      .title .health {
+        font-size: 20px;
+        font-weight: 900;
+        color: #0d47a1;
+        margin-top: 2px;
+      }
+
+      /* DETAILS - Adjusted to move upward */
+      .body1 {
+        margin-top: 8px;
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        padding: 0 15px;
+      }
+
+      .details {
+        flex: 1;
+        margin-left: 5px;
+        margin-top: 2px;
+      }
+
+      .details p {
+        font-size: 12px;
+        margin: 3px 0;
+        font-weight: bold;
+        color: #1a237e;
+        line-height: 1.3;
+      }
+
+      .details span {
+        font-weight: normal;
+        color: #3949ab;
+      }
+
+      /* QR AREA - Adjusted to move upward */
+      .qr-area {
+        width: 110px;
+        margin-right: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        margin-top: 5px;
+      }
+
+      .qr-wrapper {
+        position: relative;
+        width: 95px;
+        height: 95px;
+        background: white;
+        border-radius: 5px;
+        padding: 5px;
+        border: 1px solid #e0e0e0;
+        margin-top: 0;
+      }
+
+      /* WHITE CIRCLE + SYMBOL */
+      .qr-plus-circle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 18px;
+        height: 18px;
+        background: #ffffff;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5;
+        border: 1px solid #e0e0e0;
+      }
+
+      .qr-plus {
+        width: 10px;
+        height: 10px;
+        position: relative;
+      }
+
+      .qr-plus::before,
+      .qr-plus::after {
+        content: "";
+        position: absolute;
+        background: #0d47a1;
+      }
+
+      .qr-plus::before {
+        width: 2px;
+        height: 10px;
+        left: 4px;
+      }
+
+      .qr-plus::after {
+        width: 10px;
+        height: 2px;
+        top: 4px;
+      }
+
+      /* QR TEXT */
+      .qr-text {
+        font-size: 10px;
+        font-weight: bold;
+        color: #0d47a1;
+        margin-top: 4px;
+      }
+
+      /* UPDATED BACK SIDE CARD STYLES */
+      .body-back {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 20px 0;
+      }
+
+      /* CARD BACK - Fixed layout */
+      .card-back {
+        width: 350px;
+        height: 220px;
+        border-radius: 12px;
+        background: linear-gradient(to bottom, #e6f2ff 0%, #ffffff 15px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        padding: 0;
+        position: relative;
+        text-align: center;
+        border: 1px solid #cccccc;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      /* LOGO - Moved to top */
+      .logo-circle {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: #ffffff;
+        margin: 10px auto 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e0e0e0;
+      }
+
+      .logo-circle img {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+      }
+
+      /* GOV TEXT - Below logo */
+      .gov-text {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #0d47a1;
+        letter-spacing: 0.5px;
+      }
+
+      /* CONTENT AREA - Properly spaced */
+      .card-back-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 20px;
+      }
+
+      /* HIGHLIGHT BOXES - Proper spacing */
+      .highlight {
+        background: #e0f7fa;
+        color: #0d47a1;
+        margin: 8px 20px;
+        padding: 8px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: bold;
+        border: 1px solid #b2ebf2;
+        line-height: 1.4;
+      }
+
+      .highlight:first-of-type {
+        margin-top: 0;
+      }
+
+      .highlight:last-of-type {
+        margin-bottom: 15px;
+      }
+
+      /* FOOTER - Fixed at bottom */
+      .footer-back {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        font-size: 11px;
+        color: #666;
+        font-weight: bold;
+        letter-spacing: 0.3px;
+      }
+
+      .card-container {
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+        flex-wrap: wrap;
+        margin-bottom: 60px;
+      }
+
+      .card-actions {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 40px;
+        flex-wrap: wrap;
+      }
+
+      .btn-download {
+        background-color: var(--secondary-color);
+        color: white;
+      }
+
+      .btn-download:hover {
+        background-color: #2d9248;
+      }
+
+      .btn-print {
+        background-color: var(--gray-color);
+        color: white;
+      }
+
+      .btn-print:hover {
+        background-color: #4a4d52;
+      }
+
+      /* Laws Page */
+      .laws-container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .law-category {
+        margin-bottom: 40px;
+      }
+
+      .law-category h3 {
+        font-size: 24px;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--primary-color);
+      }
+
+      .law-item {
+        background-color: var(--card-background);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: var(--shadow);
+        border-left: 4px solid var(--primary-color);
+      }
+
+      .law-item h4 {
+        font-size: 18px;
+        color: var(--dark-color);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .law-item h4 i {
+        color: var(--primary-color);
+      }
+
+      .law-item p {
+        color: var(--gray-color);
+        margin-bottom: 10px;
+      }
+
+      .law-reference {
+        font-size: 14px;
+        color: #666;
+        font-style: italic;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #ddd;
+      }
+
+      /* Notifications Page */
+      .notifications-container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .notification-category {
+        margin-bottom: 40px;
+      }
+
+      .notification-category h3 {
+        font-size: 24px;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--primary-color);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .notification-item {
+        background-color: var(--card-background);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: var(--shadow);
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+      }
+
+      .notification-icon {
+        width: 40px;
+        height: 40px;
+        background-color: rgba(26, 115, 232, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      .notification-content {
+        flex: 1;
+      }
+
+      .notification-content h4 {
+        font-size: 18px;
+        color: var(--dark-color);
+        margin-bottom: 8px;
+      }
+
+      .notification-content p {
+        color: var(--gray-color);
+        margin-bottom: 10px;
+      }
+
+      .notification-date {
+        font-size: 14px;
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .notification-priority {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-left: 10px;
+      }
+
+      .priority-high {
+        background-color: #ffebee;
+        color: #c62828;
+      }
+
+      .priority-medium {
+        background-color: #fff3e0;
+        color: #ef6c00;
+      }
+
+      .priority-low {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+      }
+
+      /* PDFs/Books Page */
+      .resources-container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .resource-category {
+        margin-bottom: 40px;
+      }
+
+      .resource-category h3 {
+        font-size: 24px;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--primary-color);
+      }
+
+      .resource-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .resource-card {
+        background-color: var(--card-background);
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+      }
+
+      .resource-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .resource-icon {
+        font-size: 32px;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+      }
+
+      .resource-card h4 {
+        font-size: 18px;
+        color: var(--dark-color);
+        margin-bottom: 10px;
+      }
+
+      .resource-card p {
+        color: var(--gray-color);
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+
+      .resource-download {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+      }
+
+      .resource-download:hover {
+        gap: 12px;
+      }
+
+      /* Contact Page */
+      .contact-container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+
+      .contact-info {
+        background-color: var(--card-background);
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+      }
+
+      .contact-info h3 {
+        font-size: 22px;
+        color: var(--dark-color);
+        margin-bottom: 20px;
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .contact-icon {
+        width: 40px;
+        height: 40px;
+        background-color: rgba(26, 115, 232, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      .contact-details h4 {
+        font-size: 16px;
+        color: var(--dark-color);
+        margin-bottom: 5px;
+      }
+
+      .contact-details p {
+        color: var(--gray-color);
+      }
+
+      .contact-form {
+        background-color: var(--card-background);
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+      }
+
+      .contact-form h3 {
+        font-size: 22px;
+        color: var(--dark-color);
+        margin-bottom: 20px;
+      }
+
+      .form-textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        font-size: 16px;
+        font-family: "Roboto", sans-serif;
+        resize: vertical;
+        min-height: 120px;
+        margin-bottom: 20px;
+        transition: var(--transition);
+      }
+
+      .form-textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 992px) {
+        .hero-content {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .hero-text h1 {
+          font-size: 36px;
+        }
+
+        .hero-buttons {
+          justify-content: center;
+        }
+
+        .card-container {
+          gap: 30px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hamburger {
+          display: block;
+        }
+
+        .nav-links {
+          position: fixed;
+          top: 70px;
+          left: 0;
+          background-color: var(--card-background);
+          width: 100%;
+          flex-direction: column;
+          align-items: center;
+          padding: 20px 0;
+          box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+          transform: translateY(-100%);
+          opacity: 0;
+          transition: var(--transition);
+          z-index: 999;
+        }
+
+        .nav-links.active {
+          transform: translateY(0);
+          opacity: 1;
+        }
+
+        .nav-buttons {
+          display: none;
+        }
+
+        .form-row {
+          flex-direction: column;
+          gap: 0;
+        }
+
+        .card,
+        .card-back {
+          width: 320px;
+          height: 200px;
+        }
+
+        .corner img {
+          width: 30px;
+          height: 30px;
+        }
+
+        .corner {
+          width: 65px;
+          height: 50px;
+        }
+
+        .qr-wrapper {
+          width: 85px;
+          height: 85px;
+        }
+
+        .logo-circle {
+          width: 55px;
+          height: 55px;
+        }
+
+        .logo-circle img {
+          width: 40px;
+          height: 40px;
+        }
+
+        .title .health {
+          font-size: 18px;
+        }
+
+        .gov-text {
+          font-size: 12px;
+        }
+
+        .highlight {
+          font-size: 12px;
+          padding: 6px;
+          margin: 6px 15px;
+        }
+
+        .contact-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .resource-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-text h1 {
+          font-size: 28px;
+        }
+
+        .hero-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .section-title {
+          font-size: 26px;
+        }
+
+        .registration-container {
+          padding: 25px;
+        }
+
+        .card,
+        .card-back {
+          width: 290px;
+          height: 180px;
+        }
+
+        .corner img {
+          width: 25px;
+          height: 25px;
+        }
+
+        .corner {
+          width: 55px;
+          height: 40px;
+        }
+
+        .title .gov {
+          font-size: 11px;
+        }
+
+        .title .health {
+          font-size: 16px;
+        }
+
+        .details p {
+          font-size: 10px;
+        }
+
+        .qr-wrapper {
+          width: 75px;
+          height: 75px;
+        }
+
+        .qr-text {
+          font-size: 9px;
+        }
+
+        .logo-circle {
+          width: 45px;
+          height: 45px;
+        }
+
+        .logo-circle img {
+          width: 35px;
+          height: 35px;
+        }
+
+        .gov-text {
+          font-size: 11px;
+        }
+
+        .highlight {
+          font-size: 10px;
+          padding: 5px;
+          margin: 4px 12px;
+        }
+
+        .footer-back {
+          font-size: 9px;
+        }
+
+        .card-actions {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .card-actions .btn {
+          width: 100%;
+          max-width: 300px;
+        }
+
+        .notification-item {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .notification-icon {
+          margin-bottom: 10px;
+        }
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+
+          #print-area,
+          #print-area * {
+            visibility: visible;
+          }
+
+          #print-area {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+          }
+
+          button {
+            display: none !important;
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header & Navigation -->
+    <header>
+      <div class="container">
+        <nav class="navbar">
+          <div class="logo">
+            <i class="fas fa-heartbeat logo-icon"></i>
+            <div class="logo-text">One<span>Health</span></div>
+          </div>
+
+          <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+          </div>
+
+          <ul class="nav-links" id="navLinks">
+            <li>
+              <a href="#" class="nav-link active" data-page="home">Home</a>
+            </li>
+            <li>
+              <a href="#" class="nav-link" data-page="registration"
+                >Registration</a
+              >
+            </li>
+            <li>
+              <a href="#" class="nav-link" data-page="card-preview"
+                >Health Card</a
+              >
+            </li>
+            <li><a href="#" class="nav-link" data-page="laws">Laws</a></li>
+            <li>
+              <a href="#" class="nav-link" data-page="notifications"
+                >Notifications</a
+              >
+            </li>
+            <li>
+              <a href="#" class="nav-link" data-page="pdfs">PDFs/Books</a>
+            </li>
+            <li>
+              <a href="#" class="nav-link" data-page="contact">Contact</a>
+            </li>
+          </ul>
+
+          <div class="nav-buttons">
+            <button class="btn btn-primary btn-small" id="registerBtn">
+              Register Now
+            </button>
+            <button class="btn btn-secondary btn-small" id="downloadAppBtn">
+              <i class="fas fa-mobile-alt"></i> Download App
+            </button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Home Page -->
+    <section class="page active" id="home-page">
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <div class="hero-text">
+              <h1>
+                Your Digital <span>Health Identity</span> for a Safer Tomorrow
+              </h1>
+              <p>
+                The One Health Card System provides a unified digital health
+                identity for every citizen, enabling instant access to medical
+                information during emergencies and seamless healthcare services.
+              </p>
+              <div class="hero-buttons">
+                <button class="btn btn-primary" id="heroRegisterBtn">
+                  Register for Health Card
+                </button>
+                <button class="btn btn-secondary" id="heroDownloadBtn">
+                  <i class="fas fa-download"></i> Download Mobile App
+                </button>
+              </div>
+              <div class="card-preview">
+                <div class="card-header">
+                  <div class="card-logo">OneHealth</div>
+                  <div class="card-chip"></div>
+                </div>
+                <div class="card-details">
+                  <div>
+                    <div class="card-number">FAM-3056 • MEM-3800</div>
+                    <div class="card-holder">RAJESH KUMAR</div>
+                  </div>
+                  <div>
+                    <div class="card-holder">O+</div>
+                    <div class="card-holder">01/04/1985</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="section">
+        <div class="container">
+          <h2 class="section-title">Why <span>One Health Card</span>?</h2>
+
+          <div class="features">
+            <div class="feature-card">
+              <i class="fas fa-heartbeat feature-icon"></i>
+              <h3>Emergency Use</h3>
+              <p>
+                Instant access to critical health information during emergencies
+                through QR code scanning by medical personnel.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <i class="fas fa-users feature-icon"></i>
+              <h3>Family-Based Tracking</h3>
+              <p>
+                Each family gets a unique Family ID with individual Member IDs
+                for comprehensive health tracking.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <i class="fas fa-shield-alt feature-icon"></i>
+              <h3>Secure Database</h3>
+              <p>
+                All health data is stored securely with encryption and privacy
+                controls, accessible only to authorized personnel.
+              </p>
+            </div>
+          </div>
+
+          <div class="features">
+            <div class="feature-card">
+              <i class="fas fa-bolt feature-icon"></i>
+              <h3>Quick Registration</h3>
+              <p>
+                Simple online registration process with auto-generated Family ID
+                and Member ID for each individual.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <i class="fas fa-mobile-alt feature-icon"></i>
+              <h3>Mobile App</h3>
+              <p>
+                Download our mobile app to access your health card, update
+                information, and find nearby health facilities.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <i class="fas fa-file-medical feature-icon"></i>
+              <h3>Digital Health Records</h3>
+              <p>
+                Maintain digital health records including vaccinations,
+                allergies, medications, and past treatments.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="section" style="background-color: #f0f7ff">
+        <div class="container">
+          <h2 class="section-title">Frequently Asked <span>Questions</span></h2>
+
+          <div class="faq-container">
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How do I register for a One Health Card?</span>
+                <i class="fas fa-plus faq-toggle"></i>
+              </div>
+              <div class="faq-answer">
+                <p>
+                  You can register online through our website or mobile app by
+                  providing your personal details, contact information, and
+                  address. The system will automatically generate your Family ID
+                  and Member ID.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Is there any cost for the Health Card?</span>
+                <i class="fas fa-plus faq-toggle"></i>
+              </div>
+              <div class="faq-answer">
+                <p>
+                  No, the One Health Card is provided free of charge to all
+                  citizens as part of the government's healthcare initiative.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How is my health information protected?</span>
+                <i class="fas fa-plus faq-toggle"></i>
+              </div>
+              <div class="faq-answer">
+                <p>
+                  All health data is stored in a secure, encrypted database.
+                  Information is only accessible to authorized medical personnel
+                  during emergencies or with your explicit consent.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>What should I do if I lose my Health Card?</span>
+                <i class="fas fa-plus faq-toggle"></i>
+              </div>
+              <div class="faq-answer">
+                <p>
+                  You can request a replacement card through our website or
+                  mobile app. Your existing Family ID and Member ID will remain
+                  the same for continuity of your health records.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Can I update my health information?</span>
+                <i class="fas fa-plus faq-toggle"></i>
+              </div>
+              <div class="faq-answer">
+                <p>
+                  Yes, you can update your health information anytime through
+                  our website or mobile app. Critical updates like new allergies
+                  or chronic conditions should be updated immediately.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- Registration Page -->
+    <section class="page" id="registration-page">
+      <div class="container">
+        <div class="registration-container">
+          <h2 class="form-title">One Health Card Registration</h2>
+
+          <form id="registrationForm">
+            <!-- Personal Details Section -->
+            <div class="form-section">
+              <h3><i class="fas fa-user"></i> Personal Details</h3>
+
+              <div class="form-group">
+                <label for="fullName">Full Name *</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                  placeholder="Enter your full name"
+                />
+              </div>
+
+              <div class="form-row">
+                <div class="form-col">
+                  <div class="form-group">
+                    <label for="dob">Date of Birth *</label>
+                    <input type="date" id="dob" name="dob" required />
+                  </div>
+                </div>
+                <div class="form-col">
+                  <div class="form-group">
+                    <label for="gender">Gender *</label>
+                    <select id="gender" name="gender" required>
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-col">
+                  <div class="form-group">
+                    <label for="bloodGroup">Blood Group *</label>
+                    <select id="bloodGroup" name="bloodGroup" required>
+                      <option value="">Select Blood Group</option>
+                      <option value="A+">A+</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B-">B-</option>
+                      <option value="O+">O+</option>
+                      <option value="O-">O-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="AB-">AB-</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-col">
+                  <div class="form-group">
+                    <label for="aadhaar">Aadhaar Number *</label>
+                    <input
+                      type="text"
+                      id="aadhaar"
+                      name="aadhaar"
+                      required
+                      placeholder="12-digit Aadhaar number"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Details Section -->
+            <div class="form-section">
+              <h3><i class="fas fa-address-book"></i> Contact Details</h3>
+
+              <div class="form-row">
+                <div class="form-col">
+                  <div class="form-group">
+                    <label for="phone">Contact Number *</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      required
+                      placeholder="10-digit mobile number"
+                    />
+                  </div>
+                </div>
+                <div class="form-col">
+                  <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="Your email address"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="emergencyName">Emergency Contact Name *</label>
+                <input
+                  type="text"
+                  id="emergencyName"
+                  name="emergencyName"
+                  required
+                  placeholder="Name of emergency contact"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="emergencyPhone">Emergency Contact Number *</label>
+                <input
+                  type="tel"
+                  id="emergencyPhone"
+                  name="emergencyPhone"
+                  required
+                  placeholder="Emergency contact number"
+                />
+              </div>
+            </div>
+
+            <!-- Address Section -->
+            <div class="form-section">
+              <h3><i class="fas fa-home"></i> Address Details</h3>
+
+              <div class="form-group">
+                <label for="houseNo">House/Apartment Number *</label>
+                <input
+                  type="text"
+                  id="houseNo"
+                  name="houseNo"
+                  required
+                  placeholder="House/Flat number"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="street">Street/Area *</label>
+                <input
+                  type="text"
+                  id="street"
+                  name="street"
+                  required
+                  placeholder="Street name and area"
+                />
+              </div>
+
+              <div class="form-row">
+                <div class="form-col">
+                  <div class="form-group">
+                    <label for="city">City *</label>
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      required
+                      placeholder="City"
+                    />
+                  </div>
+                </div>
+                <div class="form-col">
+                  <div class="form-group">
+                    <label for="district">District *</label>
+                    <input
+                      type="text"
+                      id="district"
+                      name="district"
+                      required
+                      placeholder="District"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-col">
+                  <div class="form-group">
+                    <label for="state">State *</label>
+                    <select id="state" name="state" required>
+                      <option value="">Select State</option>
+                      <option value="delhi">Delhi</option>
+                      <option value="andhra">Andhra Pradesh</option>
+                      <option value="telangana">Telangana</option>
+                      <option value="maharashtra">Maharashtra</option>
+                      <option value="tamilnadu">Tamil Nadu</option>
+                      <option value="karnataka">Karnataka</option>
+                      <option value="kerala">Kerala</option>
+                      <option value="westbengal">West Bengal</option>
+                      <option value="uttarpradesh">Uttar Pradesh</option>
+                      <option value="gujarat">Gujarat</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-col">
+                  <div class="form-group">
+                    <label for="pincode">Pincode *</label>
+                    <input
+                      type="text"
+                      id="pincode"
+                      name="pincode"
+                      required
+                      placeholder="6-digit pincode"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Auto-generated IDs (display only) -->
+            <div class="form-section">
+              <h3><i class="fas fa-id-card"></i> Your Health Card IDs</h3>
+              <p>
+                These IDs will be automatically generated after registration:
+              </p>
+
+              <div class="form-row">
+                <div class="form-col">
+                  <div class="form-group">
+                    <label>Family ID</label>
+                    <input
+                      type="text"
+                      value="FAM-3056"
+                      readonly
+                      style="background-color: #f5f5f5; font-weight: bold"
+                    />
+                  </div>
+                </div>
+                <div class="form-col">
+                  <div class="form-group">
+                    <label>Member ID</label>
+                    <input
+                      type="text"
+                      value="MEM-3800"
+                      readonly
+                      style="background-color: #f5f5f5; font-weight: bold"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div
+              class="form-group"
+              style="text-align: center; margin-top: 30px"
+            >
+              <button
+                type="submit"
+                class="btn btn-primary"
+                style="padding: 15px 40px; font-size: 18px"
+              >
+                Generate Health Card
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Card Preview Page -->
+    <section class="page" id="card-preview-page">
+      <div class="container card-preview-page">
+        <h2 class="section-title">Your <span>One Health Card</span></h2>
+        <p
+          style="
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--gray-color);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+          "
+        >
+          Your digital health card is ready! You can download or print it for
+          use. The QR code contains your essential health information that can
+          be accessed by medical personnel during emergencies.
+        </p>
+
+        <div class="card-container">
+          <div id="print-area">
+            <!-- Front of Card -->
+            <div class="body-front">
+              <div class="card">
+                <div class="corner left">
+                  <!-- Government Logo Placeholder -->
+                  <div
+                    style="
+                      width: 35px;
+                      height: 35px;
+                      background: #0d47a1;
+                      border-radius: 50%;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      color: white;
+                      font-size: 10px;
+                      font-weight: bold;
+                    "
+                  >
+                    GOV
+                  </div>
+                </div>
+
+                <div class="corner right">
+                  <!-- Ayushman Bharat Logo Placeholder -->
+                  <div
+                    style="
+                      width: 35px;
+                      height: 35px;
+                      background: #34a853;
+                      border-radius: 50%;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      color: white;
+                      font-size: 10px;
+                      font-weight: bold;
+                    "
+                  >
+                    AB
+                  </div>
+                </div>
+
+                <div class="title">
+                  <div class="gov">GOVERNMENT OF INDIA</div>
+                  <div class="health">HEALTH CARD</div>
+                </div>
+
+                <div class="body1">
+                  <div class="details">
+                    <p>Name: <span id="card-name">Rajesh Kumar</span></p>
+                    <p>DOB: <span id="card-dob">01/04/1985</span></p>
+                    <p>Blood Group: <span id="card-blood">O+</span></p>
+                    <p>
+                      Emergency: <span id="card-emergency">9123456780</span>
+                    </p>
+                    <p>Member ID: <span id="card-member-id">MEM-3800</span></p>
+                    <p>Family ID: <span id="card-family-id">FAM-3056</span></p>
+                  </div>
+
+                  <div class="qr-area">
+                    <div class="qr-wrapper">
+                      <div id="front-qr"></div>
+                      <div class="qr-plus-circle">
+                        <div class="qr-plus"></div>
+                      </div>
+                    </div>
+                    <div class="qr-text">Scan for Details</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Back of Card -->
+            <div class="body-back">
+              <div class="card-back">
+                <div class="logo-circle">
+                  <!-- Ayushman Bharat Logo Placeholder -->
+                  <div
+                    style="
+                      width: 50px;
+                      height: 50px;
+                      background: #34a853;
+                      border-radius: 50%;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      color: white;
+                      font-size: 12px;
+                      font-weight: bold;
+                    "
+                  >
+                    AB
+                  </div>
+                </div>
+
+                <div class="gov-text">GOVERNMENT OF INDIA</div>
+
+                <div class="card-back-content">
+                  <div class="highlight">Emergency Helpline: 104, 108</div>
+
+                  <div class="highlight">
+                    Website: www.ayushmaanbharat.gov.in
+                  </div>
+                </div>
+
+                <div class="footer-back">Terms and Conditions Apply</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn btn-download" id="downloadCardBtn">
+            <i class="fas fa-download"></i> Download Health Card
+          </button>
+          <button class="btn btn-print" id="printCardBtn">
+            <i class="fas fa-print"></i> Print Health Card
+          </button>
+          <button class="btn btn-primary" id="registerAnotherBtn">
+            <i class="fas fa-user-plus"></i> Register Another Member
+          </button>
+        </div>
+
+        <div
+          style="
+            margin-top: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+          "
+        >
+          <h3 style="margin-bottom: 20px; color: var(--primary-color)">
+            How to Use Your Health Card
+          </h3>
+          <div class="features">
+            <div class="feature-card">
+              <i class="fas fa-ambulance feature-icon"></i>
+              <h3>During Emergencies</h3>
+              <p>
+                Medical personnel can scan the QR code to access your critical
+                health information like blood group, allergies, and emergency
+                contacts.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <i class="fas fa-hospital feature-icon"></i>
+              <h3>Hospital Visits</h3>
+              <p>
+                Present your health card at hospitals for quick registration and
+                access to your medical history.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <i class="fas fa-mobile-alt feature-icon"></i>
+              <h3>Mobile App</h3>
+              <p>
+                Download the One Health mobile app to access your digital card,
+                update information, and find health services.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Laws Page -->
+    <section class="page" id="laws-page">
+      <div class="container">
+        <div class="section">
+          <h2 class="section-title">Medical <span>Laws & Regulations</span></h2>
+
+          <div class="laws-container">
+            <div class="law-category">
+              <h3>
+                <i class="fas fa-balance-scale"></i> Patient Rights & Protection
+              </h3>
+
+              <div class="law-item">
+                <h4>
+                  <i class="fas fa-shield-alt"></i> Right to Information Act
+                </h4>
+                <p>
+                  Patients have the right to know about their medical condition,
+                  treatment options, risks, and costs. Healthcare providers must
+                  provide complete information in a language the patient
+                  understands.
+                </p>
+                <div class="law-reference">
+                  Reference: Section 4 of Clinical Establishment Act, 2010
+                </div>
+              </div>
+
+              <div class="law-item">
+                <h4>
+                  <i class="fas fa-user-shield"></i> Patient Confidentiality
+                </h4>
+                <p>
+                  Medical information cannot be disclosed without patient
+                  consent except in specific circumstances like court orders or
+                  public health emergencies.
+                </p>
+                <div class="law-reference">
+                  Reference: MCI Code of Ethics Regulations, 2002
+                </div>
+              </div>
+
+              <div class="law-item">
+                <h4><i class="fas fa-file-contract"></i> Informed Consent</h4>
+                <p>
+                  Written informed consent is mandatory for all surgical
+                  procedures, anesthesia, and high-risk treatments. Consent can
+                  be withdrawn at any time.
+                </p>
+                <div class="law-reference">
+                  Reference: Section 13 of Clinical Establishment Act, 2010
+                </div>
+              </div>
+            </div>
+
+            <div class="law-category">
+              <h3>
+                <i class="fas fa-prescription-bottle-alt"></i> Pharmaceutical
+                Regulations
+              </h3>
+
+              <div class="law-item">
+                <h4><i class="fas fa-capsules"></i> Drugs and Cosmetics Act</h4>
+                <p>
+                  Regulates import, manufacture, distribution and sale of drugs
+                  in India. All drugs must meet quality standards and be
+                  approved by Central Drugs Standard Control Organization.
+                </p>
+                <div class="law-reference">
+                  Reference: Drugs and Cosmetics Act, 1940
+                </div>
+              </div>
+
+              <div class="law-item">
+                <h4><i class="fas fa-ban"></i> Narcotic Drugs Control</h4>
+                <p>
+                  Strict regulations on manufacture, possession, sale, purchase,
+                  transport, and use of narcotic drugs and psychotropic
+                  substances.
+                </p>
+                <div class="law-reference">
+                  Reference: Narcotic Drugs and Psychotropic Substances Act,
+                  1985
+                </div>
+              </div>
+            </div>
+
+            <div class="law-category">
+              <h3>
+                <i class="fas fa-hospital"></i> Healthcare Facility Regulations
+              </h3>
+
+              <div class="law-item">
+                <h4>
+                  <i class="fas fa-clinic-medical"></i> Clinical Establishment
+                  Act
+                </h4>
+                <p>
+                  Mandatory registration and minimum standards for all clinical
+                  establishments. Includes requirements for infrastructure,
+                  equipment, and qualified staff.
+                </p>
+                <div class="law-reference">
+                  Reference: Clinical Establishment (Registration & Regulation)
+                  Act, 2010
+                </div>
+              </div>
+
+              <div class="law-item">
+                <h4>
+                  <i class="fas fa-ambulance"></i> Emergency Care Obligation
+                </h4>
+                <p>
+                  All hospitals must provide emergency medical care without
+                  insisting on payment or police clearance. Stabilization and
+                  transfer if needed.
+                </p>
+                <div class="law-reference">
+                  Reference: Supreme Court Judgment in Pt. Parmanand Katara vs
+                  Union of India
+                </div>
+              </div>
+            </div>
+
+            <div class="law-category">
+              <h3><i class="fas fa-dna"></i> Medical Research & Ethics</h3>
+
+              <div class="law-item">
+                <h4><i class="fas fa-flask"></i> Biomedical Research Ethics</h4>
+                <p>
+                  All biomedical research involving human participants must be
+                  approved by Institutional Ethics Committee and follow ICMR
+                  guidelines.
+                </p>
+                <div class="law-reference">
+                  Reference: ICMR Ethical Guidelines for Biomedical Research,
+                  2017
+                </div>
+              </div>
+
+              <div class="law-item">
+                <h4>
+                  <i class="fas fa-vial"></i> Organ Transplant Regulations
+                </h4>
+                <p>
+                  Strict regulations for organ donation and transplantation to
+                  prevent commercial dealings. Living donors must be near
+                  relatives with authorization committee approval.
+                </p>
+                <div class="law-reference">
+                  Reference: Transplantation of Human Organs Act, 1994
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Notifications Page -->
+    <section class="page" id="notifications-page">
+      <div class="container">
+        <div class="section">
+          <h2 class="section-title">
+            Health <span>Notifications & Updates</span>
+          </h2>
+
+          <div class="notifications-container">
+            <div class="notification-category">
+              <h3><i class="fas fa-syringe"></i> Vaccine Updates</h3>
+
+              <div class="notification-item">
+                <div class="notification-icon">
+                  <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="notification-content">
+                  <h4>
+                    New COVID-19 Booster Available
+                    <span class="notification-priority priority-high"
+                      >HIGH PRIORITY</span
+                    >
+                  </h4>
+                  <p>
+                    Updated COVID-19 booster targeting XBB variant now available
+                    at all government health centers. Recommended for adults 18+
+                    and high-risk individuals.
+                  </p>
+                  <div class="notification-date">
+                    <i class="far fa-calendar"></i> December 15, 2023
+                  </div>
+                </div>
+              </div>
+
+              <div class="notification-item">
+                <div class="notification-icon">
+                  <i class="fas fa-virus"></i>
+                </div>
+                <div class="notification-content">
+                  <h4>
+                    Influenza Vaccine Campaign
+                    <span class="notification-priority priority-medium"
+                      >MEDIUM PRIORITY</span
+                    >
+                  </h4>
+                  <p>
+                    Annual influenza vaccination campaign begins December 20.
+                    Free for children under 5, pregnant women, and senior
+                    citizens above 65.
+                  </p>
+                  <div class="notification-date">
+                    <i class="far fa-calendar"></i> December 10, 2023
+                  </div>
+                </div>
+              </div>
+
+              <div class="notification-item">
+                <div class="notification-icon">
+                  <i class="fas fa-baby"></i>
+                </div>
+                <div class="notification-content">
+                  <h4>
+                    HPV Vaccine Expansion
+                    <span class="notification-priority priority-medium"
+                      >MEDIUM PRIORITY</span
+                    >
+                  </h4>
+                  <p>
+                    HPV vaccination now extended to boys aged 9-14 in addition
+                    to girls. Protects against cervical and other cancers.
+                  </p>
+                  <div class="notification-date">
+                    <i class="far fa-calendar"></i> December 5, 2023
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="notification-category">
+              <h3><i class="fas fa-pills"></i> New Medicines & Treatments</h3>
+
+              <div class="notification-item">
+                <div class="notification-icon">
+                  <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="notification-content">
+                  <h4>
+                    Breakthrough Diabetes Drug Approved
+                    <span class="notification-priority priority-high"
+                      >HIGH PRIORITY</span
+                    >
+                  </h4>
+                  <p>
+                    New oral medication for type 2 diabetes shows 30% better
+                    glucose control. Available under Ayushman Bharat scheme from
+                    January 2024.
+                  </p>
+                  <div class="notification-date">
+                    <i class="far fa-calendar"></i> December 12, 2023
+                  </div>
+                </div>
+              </div>
+
+              <div class="notification-item">
+                <div class="notification-icon">
+                  <i class="fas fa-brain"></i>
+                </div>
+                <div class="notification-content">
+                  <h4>
+                    New Alzheimer's Treatment
+                    <span class="notification-priority priority-medium"
+                      >MEDIUM PRIORITY</span
+                    >
+                  </h4>
+                  <p>
+                    First disease-modifying treatment for early Alzheimer's
+                    approved. Slows cognitive decline by 27% in clinical trials.
+                  </p>
+                  <div class="notification-date">
+                    <i class="far fa-calendar"></i> December 8, 2023
+                  </div>
+                </div>
+              </div>
+
+              <div class="notification-item">
+                <div class="notification-icon">
+                  <i class="fas fa-lungs"></i>
+                </div>
+                <div class="notification-content">
+                  <h4>
+                    Updated Asthma Guidelines
+                    <span class="notification-priority priority-low"
+                      >LOW PRIORITY</span
+                    >
+                  </h4>
+                  <p>
+                    New treatment protocols for asthma management released.
+                    Includes updated inhaler techniques and combination
+                    therapies.
+                  </p>
+                  <div class="notification-date">
+                    <i class="far fa-calendar"></i> December 3, 2023
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="notification-category">
+              <h3><i class="fas fa-bell"></i> Health Alerts</h3>
+
+              <div class="notification-item">
+                <div class="notification-icon">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="notification-content">
+                  <h4>
+                    Respiratory Virus Alert
+                    <span class="notification-priority priority-high"
+                      >HIGH PRIORITY</span
+                    >
+                  </h4>
+                  <p>
+                    Increased cases of RSV and influenza reported in northern
+                    states. Elderly and children at higher risk. Practice hand
+                    hygiene and wear masks in crowded places.
+                  </p>
+                  <div class="notification-date">
+                    <i class="far fa-calendar"></i> December 14, 2023
+                  </div>
+                </div>
+              </div>
+
+              <div class="notification-item">
+                <div class="notification-icon">
+                  <i class="fas fa-tint"></i>
+                </div>
+                <div class="notification-content">
+                  <h4>
+                    Dengue Prevention Campaign
+                    <span class="notification-priority priority-medium"
+                      >MEDIUM PRIORITY</span
+                    >
+                  </h4>
+                  <p>
+                    Community awareness program for dengue prevention launched.
+                    Focus on eliminating mosquito breeding sites.
+                  </p>
+                  <div class="notification-date">
+                    <i class="far fa-calendar"></i> December 7, 2023
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PDFs/Books Page -->
+    <section class="page" id="pdfs-page">
+      <div class="container">
+        <div class="section">
+          <h2 class="section-title">
+            Health <span>Resources & Documents</span>
+          </h2>
+
+          <div class="resources-container">
+            <div class="resource-category">
+              <h3><i class="fas fa-file-pdf"></i> PDF Documents</h3>
+
+              <div class="resource-grid">
+                <div class="resource-card">
+                  <div class="resource-icon">
+                    <i class="fas fa-heart"></i>
+                  </div>
+                  <h4>Cardiovascular Health Guide</h4>
+                  <p>
+                    Complete guide to heart health, prevention of cardiovascular
+                    diseases, and lifestyle modifications.
+                  </p>
+                  <a href="#" class="resource-download">
+                    <i class="fas fa-download"></i> Download PDF (2.4 MB)
+                  </a>
+                </div>
+
+                <div class="resource-card">
+                  <div class="resource-icon">
+                    <i class="fas fa-child"></i>
+                  </div>
+                  <h4>Child Immunization Schedule</h4>
+                  <p>
+                    Updated immunization schedule for children from birth to 18
+                    years with vaccine information.
+                  </p>
+                  <a href="#" class="resource-download">
+                    <i class="fas fa-download"></i> Download PDF (1.8 MB)
+                  </a>
+                </div>
+
+                <div class="resource-card">
+                  <div class="resource-icon">
+                    <i class="fas fa-user-md"></i>
+                  </div>
+                  <h4>First Aid Manual</h4>
+                  <p>
+                    Emergency first aid procedures for common injuries,
+                    accidents, and medical emergencies.
+                  </p>
+                  <a href="#" class="resource-download">
+                    <i class="fas fa-download"></i> Download PDF (3.2 MB)
+                  </a>
+                </div>
+
+                <div class="resource-card">
+                  <div class="resource-icon">
+                    <i class="fas fa-utensils"></i>
+                  </div>
+                  <h4>Nutrition Guidelines</h4>
+                  <p>
+                    Dietary guidelines for different age groups and health
+                    conditions with meal plans.
+                  </p>
+                  <a href="#" class="resource-download">
+                    <i class="fas fa-download"></i> Download PDF (2.1 MB)
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="resource-category">
+              <h3><i class="fas fa-book-medical"></i> Health Books</h3>
+
+              <div class="resource-grid">
+                <div class="resource-card">
+                  <div class="resource-icon">
+                    <i class="fas fa-brain"></i>
+                  </div>
+                  <h4>Mental Health Handbook</h4>
+                  <p>
+                    Comprehensive guide to mental wellness, stress management,
+                    and recognizing disorders.
+                  </p>
+                  <a href="#" class="resource-download">
+                    <i class="fas fa-download"></i> Download E-Book (4.7 MB)
+                  </a>
+                </div>
+
+                <div class="resource-card">
+                  <div class="resource-icon">
+                    <i class="fas fa-dumbbell"></i>
+                  </div>
+                  <h4>Physical Activity Guide</h4>
+                  <p>
+                    Exercise routines for all fitness levels, yoga, and
+                    rehabilitation exercises.
+                  </p>
+                  <a href="#" class="resource-download">
+                    <i class="fas fa-download"></i> Download E-Book (3.9 MB)
+                  </a>
+                </div>
+
+                <div class="resource-card">
+                  <div class="resource-icon">
+                    <i class="fas fa-allergies"></i>
+                  </div>
+                  <h4>Chronic Disease Management</h4>
+                  <p>
+                    Managing diabetes, hypertension, arthritis, and other
+                    chronic conditions at home.
+                  </p>
+                  <a href="#" class="resource-download">
+                    <i class="fas fa-download"></i> Download E-Book (5.2 MB)
+                  </a>
+                </div>
+
+                <div class="resource-card">
+                  <div class="resource-icon">
+                    <i class="fas fa-smoking-ban"></i>
+                  </div>
+                  <h4>Substance Abuse Prevention</h4>
+                  <p>
+                    Guide to quitting tobacco, alcohol, and drug addiction with
+                    support resources.
+                  </p>
+                  <a href="#" class="resource-download">
+                    <i class="fas fa-download"></i> Download E-Book (3.5 MB)
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Page -->
+    <section class="page" id="contact-page">
+      <div class="container">
+        <div class="section">
+          <h2 class="section-title">Contact <span>Us</span></h2>
+
+          <div class="contact-container">
+            <div class="contact-grid">
+              <div class="contact-info">
+                <h3>Get in Touch</h3>
+
+                <div class="contact-item">
+                  <div class="contact-icon">
+                    <i class="fas fa-phone"></i>
+                  </div>
+                  <div class="contact-details">
+                    <h4>24x7 Helpline</h4>
+                    <p>104 (Toll-free)</p>
+                    <p>108 (Emergency Ambulance)</p>
+                  </div>
+                </div>
+
+                <div class="contact-item">
+                  <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                  </div>
+                  <div class="contact-details">
+                    <h4>Email Support</h4>
+                    <p>support@onehealth.gov.in</p>
+                    <p>helpdesk@onehealth.gmail.com</p>
+                    <p></p>
+                  </div>
+                </div>
+
+                <div class="contact-item">
+                  <div class="contact-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                  </div>
+                  <div class="contact-details">
+                    <h4>Head Office</h4>
+                    <p>Ministry of Health & Family Welfare</p>
+                    <p>Nirman Bhawan, New Delhi - 110011</p>
+                  </div>
+                </div>
+
+                <div class="contact-item">
+                  <div class="contact-icon">
+                    <i class="fas fa-clock"></i>
+                  </div>
+                  <div class="contact-details">
+                    <h4>Working Hours</h4>
+                    <p>Monday to Friday: 9:00 AM - 6:00 PM</p>
+                    <p>Saturday: 9:00 AM - 1:00 PM</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="contact-form">
+                <h3>Send Us a Message</h3>
+                <form id="contactForm">
+                  <div class="form-group">
+                    <label for="contactName">Your Name</label>
+                    <input
+                      type="text"
+                      id="contactName"
+                      name="contactName"
+                      required
+                      placeholder="Enter your name"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="contactEmail">Email Address</label>
+                    <input
+                      type="email"
+                      id="contactEmail"
+                      name="contactEmail"
+                      required
+                      placeholder="Your email address"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="contactSubject">Subject</label>
+                    <input
+                      type="text"
+                      id="contactSubject"
+                      name="contactSubject"
+                      required
+                      placeholder="Message subject"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="contactMessage">Message</label>
+                    <textarea
+                      class="form-textarea"
+                      id="contactMessage"
+                      name="contactMessage"
+                      required
+                      placeholder="Type your message here..."
+                    ></textarea>
+                  </div>
+
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="width: 100%"
+                  >
+                    <i class="fas fa-paper-plane"></i> Send Message
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center">
+              <h3 style="margin-bottom: 20px; color: var(--primary-color)">
+                Regional Offices
+              </h3>
+              <div class="features">
+                <div class="feature-card">
+                  <i class="fas fa-city feature-icon"></i>
+                  <h3>North Zone</h3>
+                  <p>
+                    Delhi, Haryana, Punjab, Himachal Pradesh, Jammu & Kashmir,
+                    Uttarakhand
+                  </p>
+                  <p><strong>Contact:</strong> 011-2306xxxx</p>
+                </div>
+
+                <div class="feature-card">
+                  <i class="fas fa-city feature-icon"></i>
+                  <h3>South Zone</h3>
+                  <p>
+                    Tamil Nadu, Kerala, Karnataka, Andhra Pradesh, Telangana
+                  </p>
+                  <p><strong>Contact:</strong> 044-2856xxxx</p>
+                </div>
+
+                <div class="feature-card">
+                  <i class="fas fa-city feature-icon"></i>
+                  <h3>East Zone</h3>
+                  <p>
+                    West Bengal, Odisha, Bihar, Jharkhand, Assam, North East
+                    States
+                  </p>
+                  <p><strong>Contact:</strong> 033-2367xxxx</p>
+                </div>
+
+                <div class="feature-card">
+                  <i class="fas fa-city feature-icon"></i>
+                  <h3>West Zone</h3>
+                  <p>Maharashtra, Gujarat, Rajasthan, Madhya Pradesh, Goa</p>
+                  <p><strong>Contact:</strong> 022-2654xxxx</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>One Health Card</h3>
+            <p>
+              A unified digital health identity system for all citizens,
+              ensuring quick access to medical information during emergencies.
+            </p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <a href="#" data-page="home">Home</a>
+            <a href="#" data-page="registration">Registration</a>
+            <a href="#" data-page="card-preview">Health Card</a>
+            <a href="#" data-page="laws">Laws & Regulations</a>
+            <a href="#" data-page="notifications">Notifications</a>
+          </div>
+
+          <div class="footer-section">
+            <h3>Resources</h3>
+            <a href="#" data-page="pdfs">PDF Documents</a>
+            <a href="#" data-page="pdfs">Health Books</a>
+            <a href="#">Emergency Protocols</a>
+            <a href="#">Vaccination Schedule</a>
+            <a href="#">Healthcare Providers</a>
+          </div>
+
+          <div class="footer-section">
+            <h3>Contact Us</h3>
+            <p><i class="fas fa-phone"></i> 24x7 Helpline: 104</p>
+            <p><i class="fas fa-envelope"></i> support@onehealth.gov.in</p>
+            <p>
+              <i class="fas fa-map-marker-alt"></i> Ministry of Health & Family
+              Welfare, Government of India
+            </p>
+          </div>
+        </div>
+
+        <div class="copyright">
+          <p>
+            &copy; 2023 One Health Card System. All rights reserved. | Designed
+            for Government Health Scheme
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Navigation functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        // Page navigation
+        const navLinks = document.querySelectorAll(".nav-link");
+        const pages = document.querySelectorAll(".page");
+        const hamburger = document.getElementById("hamburger");
+        const navLinksContainer = document.getElementById("navLinks");
+        const registerButtons = document.querySelectorAll(
+          "#registerBtn, #heroRegisterBtn"
+        );
+        const downloadAppButtons = document.querySelectorAll(
+          "#downloadAppBtn, #heroDownloadBtn"
+        );
+        const registerAnotherBtn =
+          document.getElementById("registerAnotherBtn");
+        const registrationForm = document.getElementById("registrationForm");
+        const contactForm = document.getElementById("contactForm");
+
+        // Navigation between pages
+        navLinks.forEach((link) => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Get target page
+            const targetPage = this.getAttribute("data-page");
+
+            // Update active nav link
+            navLinks.forEach((nav) => nav.classList.remove("active"));
+            this.classList.add("active");
+
+            // Show target page
+            pages.forEach((page) => {
+              page.classList.remove("active");
+              if (page.id === `${targetPage}-page`) {
+                page.classList.add("active");
+              }
+            });
+
+            // Close mobile menu if open
+            navLinksContainer.classList.remove("active");
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+
+            // Generate QR code for card preview page
+            if (targetPage === "card-preview") {
+              generateInitialQRCode();
+            }
+          });
+        });
+
+        // Register buttons - go to registration page
+        registerButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            // Update active nav link
+            navLinks.forEach((nav) => nav.classList.remove("active"));
+            document
+              .querySelector('[data-page="registration"]')
+              .classList.add("active");
+
+            // Show registration page
+            pages.forEach((page) => {
+              page.classList.remove("active");
+              if (page.id === "registration-page") {
+                page.classList.add("active");
+              }
+            });
+
+            // Close mobile menu if open
+            navLinksContainer.classList.remove("active");
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+          });
+        });
+
+        // Download app buttons
+        downloadAppButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            alert(
+              "One Health Mobile App is available for download on Google Play Store and Apple App Store."
+            );
+          });
+        });
+
+        // Register another member button
+        if (registerAnotherBtn) {
+          registerAnotherBtn.addEventListener("click", function () {
+            // Update active nav link
+            navLinks.forEach((nav) => nav.classList.remove("active"));
+            document
+              .querySelector('[data-page="registration"]')
+              .classList.add("active");
+
+            // Show registration page
+            pages.forEach((page) => {
+              page.classList.remove("active");
+              if (page.id === "registration-page") {
+                page.classList.add("active");
+              }
+            });
+
+            // Reset form
+            if (registrationForm) {
+              registrationForm.reset();
+            }
+
+            // Close mobile menu if open
+            navLinksContainer.classList.remove("active");
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+          });
+        }
+
+        // Hamburger menu for mobile
+        hamburger.addEventListener("click", function () {
+          navLinksContainer.classList.toggle("active");
+        });
+
+        // FAQ toggle functionality
+        const faqQuestions = document.querySelectorAll(".faq-question");
+        faqQuestions.forEach((question) => {
+          question.addEventListener("click", function () {
+            const answer = this.nextElementSibling;
+            const parent = this.parentElement;
+            const toggleIcon = this.querySelector(".faq-toggle");
+
+            // Close other open FAQs
+            document.querySelectorAll(".faq-answer").forEach((item) => {
+              if (item !== answer && item.classList.contains("open")) {
+                item.classList.remove("open");
+                item.previousElementSibling.querySelector(
+                  ".faq-toggle"
+                ).style.transform = "rotate(0deg)";
+                item.parentElement.classList.remove("active");
+              }
+            });
+
+            // Toggle current FAQ
+            answer.classList.toggle("open");
+            parent.classList.toggle("active");
+
+            if (answer.classList.contains("open")) {
+              toggleIcon.style.transform = "rotate(45deg)";
+            } else {
+              toggleIcon.style.transform = "rotate(0deg)";
+            }
+          });
+        });
+
+        // Registration form submission
+        if (registrationForm) {
+          registrationForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            // Get form data
+            const formData = {
+              fullName: document.getElementById("fullName").value,
+              dob: document.getElementById("dob").value,
+              gender: document.getElementById("gender").value,
+              bloodGroup: document.getElementById("bloodGroup").value,
+              aadhaar: document.getElementById("aadhaar").value,
+              phone: document.getElementById("phone").value,
+              email: document.getElementById("email").value,
+              emergencyName: document.getElementById("emergencyName").value,
+              emergencyPhone: document.getElementById("emergencyPhone").value,
+              houseNo: document.getElementById("houseNo").value,
+              street: document.getElementById("street").value,
+              city: document.getElementById("city").value,
+              district: document.getElementById("district").value,
+              state: document.getElementById("state").value,
+              pincode: document.getElementById("pincode").value,
+            };
+
+            // Update card with user data
+            updateHealthCard(formData);
+
+            // Generate unique IDs (in a real system, these would come from the backend)
+            const familyId = "FAM-" + Math.floor(1000 + Math.random() * 9000);
+            const memberId =
+              "MEM-" +
+              String(Math.floor(1 + Math.random() * 9)).padStart(3, "0");
+
+            // Update IDs on card
+            document.getElementById("card-family-id").textContent = familyId;
+            document.getElementById("card-member-id").textContent = memberId;
+
+            // Generate QR codes
+            generateQRCode(formData, familyId, memberId);
+
+            // Navigate to card preview page
+            navLinks.forEach((nav) => nav.classList.remove("active"));
+            document
+              .querySelector('[data-page="card-preview"]')
+              .classList.add("active");
+
+            pages.forEach((page) => {
+              page.classList.remove("active");
+              if (page.id === "card-preview-page") {
+                page.classList.add("active");
+              }
+            });
+
+            // Close mobile menu if open
+            navLinksContainer.classList.remove("active");
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+
+            // Show success message
+            alert(
+              "Registration successful! Your Health Card has been generated."
+            );
+          });
+        }
+
+        // Contact form submission
+        if (contactForm) {
+          contactForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const contactData = {
+              name: document.getElementById("contactName").value,
+              email: document.getElementById("contactEmail").value,
+              subject: document.getElementById("contactSubject").value,
+              message: document.getElementById("contactMessage").value,
+            };
+
+            // In a real application, this would send data to a server
+            alert(
+              "Thank you for your message! We will respond within 24-48 hours."
+            );
+            contactForm.reset();
+          });
+        }
+
+        // Download card button
+        const downloadCardBtn = document.getElementById("downloadCardBtn");
+        if (downloadCardBtn) {
+          downloadCardBtn.addEventListener("click", function () {
+            alert(
+              "In a real application, this would download a PDF of your health card. For now, you can print the page."
+            );
+          });
+        }
+
+        // Print card button
+        const printCardBtn = document.getElementById("printCardBtn");
+        if (printCardBtn) {
+          printCardBtn.addEventListener("click", function () {
+            window.print();
+          });
+        }
+
+        // Generate initial QR codes
+        generateInitialQRCode();
+      });
+
+      // Function to update health card with user data
+      function updateHealthCard(formData) {
+        // Format date of birth
+        const dob = new Date(formData.dob);
+        const formattedDOB = `${String(dob.getDate()).padStart(
+          2,
+          "0"
+        )}/${String(dob.getMonth() + 1).padStart(2, "0")}/${dob.getFullYear()}`;
+
+        // Update card details
+        document.getElementById("card-name").textContent =
+          formData.fullName.toUpperCase();
+        document.getElementById("card-dob").textContent = formattedDOB;
+        document.getElementById("card-blood").textContent = formData.bloodGroup;
+        document.getElementById("card-emergency").textContent =
+          formData.emergencyPhone;
+      }
+
+      // Function to generate QR code
+      function generateQRCode(formData, familyId, memberId) {
+        // Create QR data string
+        const qrData = JSON.stringify({
+          name: formData.fullName,
+          dob: formData.dob,
+          bloodGroup: formData.bloodGroup,
+          phone: formData.phone,
+          emergencyContact: formData.emergencyPhone,
+          familyId: familyId,
+          memberId: memberId,
+          lastUpdated: new Date().toISOString().split("T")[0],
+        });
+
+        // Clear existing QR codes
+        const frontQrElement = document.getElementById("front-qr");
+        if (frontQrElement) {
+          frontQrElement.innerHTML = "";
+
+          // Generate QR code
+          new QRCode(frontQrElement, {
+            text: qrData,
+            width: 85,
+            height: 85,
+            correctLevel: QRCode.CorrectLevel.H,
+          });
+        }
+      }
+
+      // Generate initial QR codes for demo
+      function generateInitialQRCode() {
+        const demoData = {
+          fullName: "Rajesh Kumar",
+          dob: "1985-04-01",
+          bloodGroup: "O+",
+          phone: "9876543210",
+          emergencyPhone: "9123456780",
+        };
+
+        const familyId = "FAM-3056";
+        const memberId = "MEM-3800";
+
+        // Generate QR code
+        const frontQrElement = document.getElementById("front-qr");
+        if (frontQrElement) {
+          frontQrElement.innerHTML = "";
+
+          const qrData = JSON.stringify({
+            name: demoData.fullName,
+            dob: demoData.dob,
+            bloodGroup: demoData.bloodGroup,
+            phone: demoData.phone,
+            emergencyContact: demoData.emergencyPhone,
+            familyId: familyId,
+            memberId: memberId,
+            lastUpdated: new Date().toISOString().split("T")[0],
+          });
+
+          new QRCode(frontQrElement, {
+            text: qrData,
+            width: 85,
+            height: 85,
+            correctLevel: QRCode.CorrectLevel.H,
+          });
+        }
+      }
+    </script>
+    <script>
+      document.getElementById("printCardBtn").addEventListener("click", () => {
+        window.print();
+      });
+    </script>
+
+    <script>
+      function showPage(pageId) {
+        document.querySelectorAll(".page").forEach((page) => {
+          page.classList.remove("active");
+        });
+
+        const target = document.getElementById(pageId);
+        if (target) {
+          target.classList.add("active");
+        }
+      }
+    </script>
+
+    <script>
+      async function loadHealthCard(memberId) {
+        try {
+          // 1️⃣ FIRST show card page
+          showPage("card-preview-page");
+
+          // 2️⃣ THEN fetch backend data
+          const response = await fetch(
+            `http://localhost:5000/api/citizens/card/${memberId}`
+          );
+
+          const result = await response.json();
+
+          if (!response.ok || !result.success) {
+            alert("Unable to load health card data");
+            return;
+          }
+
+          const data = result.data;
+
+          // 3️⃣ NOW safely update DOM
+          document.getElementById("card-name").innerText = data.fullName;
+          document.getElementById("card-dob").innerText = new Date(
+            data.dob
+          ).toLocaleDateString();
+          document.getElementById("card-blood").innerText = data.bloodGroup;
+          document.getElementById("card-emergency").innerText =
+            data.emergencyContact.phone;
+          document.getElementById("card-member-id").innerText = data.memberId;
+          document.getElementById("card-family-id").innerText = data.familyId;
+          generateQRCode(data.memberId);
+        } catch (error) {
+          console.error("Card load error:", error);
+          alert("Server error while loading card");
+        }
+      }
+    </script>
+    <script>
+      function generateQRCode(memberId) {
+        const qrContainer = document.getElementById("front-qr");
+
+        // Clear old QR if exists
+        qrContainer.innerHTML = "";
+
+        // QR payload (safe)
+        const qrData = JSON.stringify({ memberId });
+
+        new QRCode(qrContainer, {
+          text: qrData,
+          width: 90,
+          height: 90,
+          colorDark: "#0d47a1",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
+        });
+      }
+    </script>
+
+    <script>
+      const form = document.getElementById("registrationForm");
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault(); // stop page reload
+
+        const payload = {
+          fullName: document.getElementById("fullName").value,
+          dob: document.getElementById("dob").value,
+          gender: document.getElementById("gender").value,
+          bloodGroup: document.getElementById("bloodGroup").value,
+          emergencyContact: {
+            name: document.getElementById("emergencyName").value,
+            phone: document.getElementById("emergencyPhone").value,
+          },
+          address: {
+            city: document.getElementById("city").value,
+            state: document.getElementById("state").value,
+            pincode: document.getElementById("pincode").value,
+          },
+        };
+
+        try {
+          const response = await fetch(
+            "http://localhost:5000/api/citizens/register",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(payload),
+            }
+          );
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            alert(data.message || "Registration failed");
+            return;
+          }
+
+          alert("Registration successful! Loading your Health Card...");
+          loadHealthCard(data.memberId);
+          // ✅ STEP 3: FIX REGISTRATION SUCCESS HANDLER
+          localStorage.setItem("memberId", data.memberId);
+          loadHealthCard(data.memberId);
+
+          // optional: redirect to card page later
+          // window.location.href = "card.html";
+        } catch (error) {
+          console.error("Frontend error:", error);
+          alert("Unable to connect to server");
+        }
+      });
+    </script>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const savedMemberId = localStorage.getItem("memberId");
+        if (savedMemberId) {
+          loadHealthCard(savedMemberId);
+        }
+      });
+    </script>
+  </body>
+</html>
